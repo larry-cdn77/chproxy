@@ -78,6 +78,8 @@ func main() {
 		panic("BUG: broken config validation - `listen_addr` is not configured")
 	}
 
+	notifyReady()
+
 	if server.HTTP.ForceAutocertHandler {
 		autocertManager = newAutocertManager(server.HTTPS.Autocert)
 	}
@@ -89,6 +91,15 @@ func main() {
 	}
 
 	select {}
+}
+
+func notifyReady() {
+	sent, err := sdNotifyReady()
+	if err != nil {
+		log.Errorf("SdNotify error: %s", err)
+	} else if !sent {
+		log.Debugf("SdNotify unsupported (not a systemd service?)")
+	}
 }
 
 var autocertManager *autocert.Manager
