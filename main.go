@@ -78,6 +78,8 @@ func main() {
 		panic("BUG: broken config validation - `listen_addr` is not configured")
 	}
 
+	sdNotifyReady()
+
 	if server.HTTP.ForceAutocertHandler {
 		autocertManager = newAutocertManager(server.HTTPS.Autocert)
 	}
